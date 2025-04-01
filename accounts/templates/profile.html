@@ -10,7 +10,11 @@
                 <div class="col-3">{{user_profile.username}}</div>
                 {% if user != user_profile %}
                 <div class="col-9">
-                    <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-primary">팔로우</a>
+                    {% if user in user_profile.followers.all %}
+                        <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-secondary">팔로우취소</a>
+                    {% else %}
+                        <a href="{% url 'accounts:follow' user_profile.username %}" class="btn btn-primary">팔로우</a>
+                    {% endif %}
                 </div>
                 {% endif %}
             </div>

@@ -61,3 +61,16 @@ def like(request, post_id):
 
     return redirect('posts:index')
 
+def feed(request):
+    followings = request.user.followings.all()
+
+    posts = Post.objects.filter(user__in=followings) # 내가 팔로우 하는 사람들이 작성한 게시물들
+    form = CommentForm()
+
+    context = {
+        'posts': posts,
+        'form': form,
+    }
+
+    return render(request, 'index.html', context)
+
