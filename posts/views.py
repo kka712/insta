@@ -74,3 +74,33 @@ def feed(request):
 
     return render(request, 'index.html', context)
 
+
+from django.http import JsonResponse
+def like_async(request, id):
+    user = request.user
+    post = Post.objects.get(id=id)
+
+    if user in post.like_users.all():
+        post.like_users.remove(user)
+        status = False
+    else:
+        post.like_users.add(user)
+        status = True
+
+    context = {
+        'post_id': id,
+        'status': status,
+        'count': len(post.like_users.all())
+    }
+    return JsonResponse(context)
+
+
+def search(request):
+    query = request.GET.get('query')
+    posts = Post.objects.filter(title__contains=query)
+
+    context = {
+        'posts': posts
+    }
+
+    return render(request, 'search.html', context)
